@@ -1,18 +1,25 @@
 #!/usr/bin/env bash
 
-set -e
+. /opt/esp/entrypoint.sh
+set +e
+
+needed_env=$(env | sort | grep -E "^(IDF_|ESP_|PATH)")
+export_needed_env=$(echo "$needed_env" | awk '{print "export " $0}')
+first_usb_group=$(find /dev \( -iname 'ttyACM*' -or -iname 'ttyUSB*' \) -exec stat --format="%G" {} \; | head -n 1)
 
 usermod -aG root ubuntu
-usermod -aG dialout "root"
-usermod -aG dialout "$(id -un)"
+usermod -aG dialout ubuntu
 
-chmod -R go+rw /root
-chmod go+rwx /root
+find /dev \( -iname 'ttyACM*' -or -iname 'ttyUSB*' \) -exec stat --format="%G" {} \; \
+    | xargs -I{} usermod -aG {} ubuntu
 
-cat >> /root/.bashrc <<EOF
+cat >> /home/ubuntu/.bashrc <<EOF
 # =================================
-# https://github.com/espressif/esp-idf/blob/master/tools/docker/Dockerfile
-. /opt/esp/entrypoint.sh
+$export_needed_env
+cd /app
 EOF
 
-su ubuntu -g ubuntu -m
+# Run with the first USB group. That means the user needs to connect the USB device before running the container.
+# You can manually change the group with `newgrp $first_usb_group` after running the container.
+su ubuntu -g ubuntu ${first_usb_group:+-G $first_usb_group} -l
+exit $?
