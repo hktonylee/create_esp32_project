@@ -6,3 +6,9 @@ _exclude:
   - /.gitignore
   - /copier.yml
   - /README.md
+
+# Questions
+project_name:
+  type: str
+  description: The name of the project
+  default: "my_project"
