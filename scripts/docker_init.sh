@@ -19,6 +19,9 @@ $export_needed_env
 cd /app
 EOF
 
+# Optional: change the ESP32 target
+# idf.py set-target esp32c3
+
 # Run with the first USB group. That means the user needs to connect the USB device before running the container.
 # You can manually change the group with `newgrp $first_usb_group` after running the container.
 su ubuntu -g ubuntu ${first_usb_group:+-G $first_usb_group} -l
