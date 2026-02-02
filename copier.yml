@@ -1,0 +1,8 @@
+# Template configuration
+_min_copier_version: "9.0.0"
+_exclude:
+  - /.git
+  - /.vscode
+  - /.gitignore
+  - /copier.yml
+  - /README.md
