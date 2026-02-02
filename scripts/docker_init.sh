@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 . /opt/esp/entrypoint.sh
-set +e
+
+set -e
 
 needed_env=$(env | sort | grep -E "^(IDF_|ESP_|PATH)")
 export_needed_env=$(echo "$needed_env" | awk '{print "export " $0}')
@@ -20,6 +21,7 @@ cd /app
 EOF
 
 # Optional: change the ESP32 target
+# You can speed this up by using `docker commit` to save the target as a layer.
 # idf.py set-target esp32c3
 
 # Run with the first USB group. That means the user needs to connect the USB device before running the container.
