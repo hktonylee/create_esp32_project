@@ -7,11 +7,13 @@ _exclude:
   - /copier.yml
   - /README.md
 
-_tasks:
-  - "git init"
-
 # Questions
 project_name:
   type: str
-  description: The name of the project
-  default: "my_project"
+  description: The name of the project. Need to be valid CMake project name
+  default: "MyProject"
+  validator: >-
+  {% if not (project_name | regex_search("^[A-Za-z_][A-Za-z0-9_]*$")) %}
+    Project name must be a valid CMake project name.
+  {% endif %}
+
