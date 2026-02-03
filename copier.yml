@@ -11,9 +11,9 @@ _exclude:
 project_name:
   type: str
   description: The name of the project. Need to be valid CMake project name
-  default: "MyProject"
+  default: "{{ _copier_conf.dst_path.name }}"
   validator: >-
-  {% if not (project_name | regex_search("^[A-Za-z_][A-Za-z0-9_]*$")) %}
-    Project name must be a valid CMake project name.
-  {% endif %}
+    {% if not (project_name | regex_search("^[A-Za-z_][A-Za-z0-9_]*$")) %}
+      Project name must be a valid CMake project name.
+    {% endif %}
 
