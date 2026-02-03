@@ -7,6 +7,9 @@ _exclude:
   - /copier.yml
   - /README.md
 
+_tasks:
+  - "git init"
+
 # Questions
 project_name:
   type: str
