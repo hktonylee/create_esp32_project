@@ -2,7 +2,7 @@
 
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
-TTY_DEVICES_ARGS=$(shell find /dev \( -iname 'ttyACM*' -or -iname 'ttyUSB*' \) -exec printf "--device=%s" {} \;)
+TTY_DEVICES_ARGS=$(shell find /dev \( -iname 'ttyACM*' -or -iname 'ttyUSB*' \) -exec printf "--device=%s " {} \;)
 
 run:
 	@docker run \
