@@ -15,6 +15,7 @@ run:
 		-w "/app" \
 		$(TTY_DEVICES_ARGS) \
 		-it \
+		--name {{project_name}} \
 		--entrypoint "/app/scripts/docker_init.sh" \
 		$(DOCKER_IMAGE) \
 
