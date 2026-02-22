@@ -22,3 +22,7 @@ install-minicom:
 	@docker exec -it "$(CONTAINER_ID)" apt-get update
 	@docker exec -it "$(CONTAINER_ID)" apt-get install -y minicom
 
+connect-minicom:
+	@docker exec -it "$(CONTAINER_ID)" minicom -D /dev/ttyUSB0 -b 115200
+
+
