@@ -11,6 +11,9 @@ first_usb_group=$(find /dev \( -iname 'ttyACM*' -or -iname 'ttyUSB*' \) -exec st
 usermod -aG root ubuntu
 usermod -aG dialout ubuntu
 
+mkdir -p /opt/esp/root_managed_components
+chmod a+rwx /opt/esp/root_managed_components
+
 find /dev \( -iname 'ttyACM*' -or -iname 'ttyUSB*' \) -exec stat --format="%G" {} \; \
     | xargs -I{} usermod -aG {} ubuntu
 
