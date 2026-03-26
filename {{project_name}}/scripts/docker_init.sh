@@ -6,7 +6,8 @@ set -e
 
 needed_env=$(env | sort | grep -E "^(IDF_|ESP_|PATH)")
 export_needed_env=$(echo "$needed_env" | awk '{print "export " $0}')
-first_usb_group=$(find /dev \( -iname 'ttyACM*' -or -iname 'ttyUSB*' \) -exec stat --format="%G" {} \; | head -n 1)
+usb_groups=$(find /dev \( -iname 'ttyACM*' -or -iname 'ttyUSB*' \) -exec stat --format="%G" {} \;)
+first_usb_group=$(echo "$usb_groups" | head -n 1)
 
 usermod -aG root ubuntu
 usermod -aG dialout ubuntu
@@ -14,8 +15,9 @@ usermod -aG dialout ubuntu
 mkdir -p /opt/esp/root_managed_components
 chmod a+rwx /opt/esp/root_managed_components
 
-find /dev \( -iname 'ttyACM*' -or -iname 'ttyUSB*' \) -exec stat --format="%G" {} \; \
-    | xargs -I{} usermod -aG {} ubuntu
+echo "$usb_groups" \
+    | paste -sd, - \
+    | xargs -I{} -- usermod -aG {} ubuntu
 
 cat >> /home/ubuntu/.bashrc <<EOF
 # =================================
@@ -29,5 +31,6 @@ EOF
 
 # Run with the first USB group. That means the user needs to connect the USB device before running the container.
 # You can manually change the group with `newgrp $first_usb_group` after running the container.
-su ubuntu -g ubuntu ${first_usb_group:+-G $first_usb_group} -l
+su_groups="$(echo "$usb_groups" | awk '{ print "-G ", $0 }')"
+su ubuntu -g ubuntu ${su_groups} -l
 exit $?
